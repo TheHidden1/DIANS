@@ -3,18 +3,17 @@ package finki.ukim.mk.macedonian_heritage.web.controllers;
 import finki.ukim.mk.macedonian_heritage.model.Objects;
 import finki.ukim.mk.macedonian_heritage.services.ObjectsServices;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@EnableWebMvc
-@Configuration
+@Validated
+@CrossOrigin(origins="*")
 @RequestMapping(name="All Objects", value = "/api/v1/")
 public class ObjectsController {
     private final ObjectsServices objectsServices;
@@ -24,15 +23,15 @@ public class ObjectsController {
     }
 
     @GetMapping("/objects")
-    public List<Objects> getAllObjects(){
-        return objectsServices.findAllObjects();
+    public ResponseEntity<List<Objects>> getAllObjects(){
+        return new ResponseEntity<List<Objects>>(objectsServices.findAllObjects(), HttpStatus.OK);
     }
-    @GetMapping("/objects/ID/{id}")
-    private Optional<Objects> getById(@PathVariable(name = "id") long id){
-        return objectsServices.findById(id);
+    @GetMapping("/objects/id/{id}")
+    public ResponseEntity<Optional<Objects>> getById(@PathVariable(name = "id") long id){
+        return new ResponseEntity<>(objectsServices.findById(id), HttpStatus.OK);
     }
     @GetMapping("/objects/category/{category}")
-    private List<Objects> getByCategory(@PathVariable(name = "category") String category){
-        return objectsServices.findByCategory(category);
+    public ResponseEntity<List<Objects>> getByCategory(@PathVariable(name = "category") String category){
+        return new ResponseEntity<>(objectsServices.findByCategory(category), HttpStatus.OK);
     }
 }
