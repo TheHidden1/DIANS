@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
+import logoUrl from "../assets/images/logo.png"
 
 export default function Login() {
     const [username, setUsername] = useState("")
@@ -22,8 +23,8 @@ export default function Login() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
+            src={logoUrl}
+            alt="MHT"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Log in to your account
@@ -80,7 +81,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={doLogin}
-                className="flex w-full justify-center rounded-md bg-indigo-600 mb-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-yellow-800 mb-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-800"
               >
                 Log in
               </button>
@@ -92,7 +93,7 @@ export default function Login() {
             Not a member?{" "}
             <a
               href="/register"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              className="font-semibold leading-6 text-yellow-800 hover:text-yellow-700"
             >
               Register Now
             </a>
