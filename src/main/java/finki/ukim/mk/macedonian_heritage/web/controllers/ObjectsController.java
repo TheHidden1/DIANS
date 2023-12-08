@@ -22,15 +22,15 @@ public class ObjectsController {
         this.objectsServices = objectsServices;
     }
 
-    @GetMapping("/objects")
+    @GetMapping(value = "/objects", produces = "application/JSON")
     public ResponseEntity<List<Objects>> getAllObjects(){
         return new ResponseEntity<List<Objects>>(objectsServices.findAllObjects(), HttpStatus.OK);
     }
-    @GetMapping("/objects/id/{id}")
+    @GetMapping(value="/objects/id/{id}", produces = "application/JSON")
     public ResponseEntity<Optional<Objects>> getById(@PathVariable(name = "id") long id){
         return new ResponseEntity<>(objectsServices.findById(id), HttpStatus.OK);
     }
-    @GetMapping("/objects/category/{category}")
+    @GetMapping(value = "/objects/category/{category}", produces = "application/JSON")
     public ResponseEntity<List<Objects>> getByCategory(@PathVariable(name = "category") String category){
         return new ResponseEntity<>(objectsServices.findByCategory(category), HttpStatus.OK);
     }
