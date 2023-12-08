@@ -5,8 +5,8 @@ import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 
-const defaultCenter = [41.9981, 21.4254];
-const defaultZoom = 11;
+const defaultCenter = [41.7080, 21.6530];
+const defaultZoom = 9;
 const LeafIcon = L.Icon.extend({
   options: { iconSize: [24, 30], iconAnchor: [12, 24], popupAnchor: [0, -20] },
 });
@@ -58,23 +58,25 @@ const MapPage = () => {
   }
 
   let fetchData = async () => {
-    const response = await axios.get("http://localhost:5000/places");
-    let tmp = []
+    const response = await axios.get(
+      "https://webapplicationmht.azurewebsites.net/api/v1/objects"
+    );
+    let tmp = [];
     let data = response.data;
     data.forEach((location) => {
       tmp.push({
-        lat: location[2],
-        lng: location[3],
-        name: location[4],
-        type: location[5],
-        icon: getIcon(location[5]),
-        link: "/attraction?id="+location[0]
-      })
-    })
-    setLocations(tmp)
-    setFetched(true)
-  }
-
+        lat: parseFloat(location.lat),
+        lng: parseFloat(location.lng),
+        name: location.name,
+        type: location.category,
+        icon: getIcon(location.category),
+        link: "/attraction?id=" + location.id,
+      });
+    });
+    setLocations(tmp);
+    setFetched(true);
+  };
+  
   return fetched ? (
     <div
       className="w-100 flex flex-column items-center justify-center rounded"
@@ -115,7 +117,7 @@ const MapPage = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        history(attraction.link)
+                        history(attraction.link);
                       }}
                       className="text-white bg-yellow-800 hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm mt-2 px-3 py-1.5 me-2 mb-2 dark:bg-yellow-800 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-blue-800"
                     >
@@ -136,7 +138,10 @@ const MapPage = () => {
       </div>
     </div>
   ) : (
-    <p>Loading...</p>
+    <div className="flex items-center justify-center">
+      <p className="space-y-50">Loading...</p>
+    </div>
   );
+  
 };
 export default MapPage;

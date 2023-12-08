@@ -7,7 +7,7 @@ export default function Login() {
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
     function doLogin(){
-        let apiResponse = username === "ace" && password === "123"
+        let apiResponse = username === "test" && password === "123"
         if(apiResponse) {
             setError("")
             Cookies.set("token", "123")
