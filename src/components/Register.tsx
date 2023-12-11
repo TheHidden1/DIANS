@@ -9,7 +9,7 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [error, setError] = useState("")
     function doLogin(){
-        let apiResponse = username === "ace" && password === "123" && confirmPassword === "123"
+        const apiResponse = username === "ace" && password === "123" && confirmPassword === "123"
         if(apiResponse) {
             setError("")
             window.location.pathname='/login'

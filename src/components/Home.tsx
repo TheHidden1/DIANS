@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import homePageImg from "../assets/images/kaneo.jpg";
 import { useNavigate } from 'react-router-dom';
 const Home = () => {
@@ -34,12 +34,14 @@ const Home = () => {
           <button
             style={{
               backgroundColor: "white",
-              width: "13vw",
-              height: "6.5vh",
+              width: "fit-content",
+              height: "fit-content",
               borderRadius: "4px",
               marginTop: "24px",
+              padding: "10px",
+              fontSize: "clamp(16px, 20px, 30px)",
             }}
-            className="text-yellow-700 text-2xl "
+            className="text-yellow-700"
             onClick={navigateAbout}
           >
             Дознај повеќе
