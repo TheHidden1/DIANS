@@ -18,19 +18,19 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Users> login(@RequestParam String username, @RequestParam String password){
+    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password){
         try  {
             System.out.println("Received login request. Username: " + username + ", Password: " + password);
             Users user= authService.login(username, password);
             return ResponseEntity.ok(user);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Users> register(
+    public ResponseEntity<?> register(
             @RequestParam String username,
             @RequestParam String password,
             @RequestParam String repeatPassword,
@@ -40,7 +40,7 @@ public class AuthController {
             Users user= authService.register(username, password, repeatPassword, name, surname);
             return ResponseEntity.ok(user);
         }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
