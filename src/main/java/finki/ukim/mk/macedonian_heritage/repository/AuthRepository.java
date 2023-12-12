@@ -14,4 +14,6 @@ public interface AuthRepository extends JpaRepository<Users, String> {
 
     @Override
     <S extends Users> S save(S entity);
+
+    Users findByUsername(String username);
 }
