@@ -13,7 +13,6 @@ import static java.lang.Long.parseLong;
 @Table(name="OBJECTS")
 public class Objects {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID")
     private long id;
     @Column(name="lat")
