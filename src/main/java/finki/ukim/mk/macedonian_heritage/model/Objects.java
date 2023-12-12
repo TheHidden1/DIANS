@@ -3,6 +3,8 @@ package finki.ukim.mk.macedonian_heritage.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
@@ -22,6 +24,8 @@ public class Objects {
     private String name;
     @Column(name="tourism")
     private String category;
+    @OneToMany(mappedBy = "object")
+    private List<Review> reviewList;
 
     public void setId(Long id) {
         this.id = id;

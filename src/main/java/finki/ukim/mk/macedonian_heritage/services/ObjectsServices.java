@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ObjectsServices {
     public List<Objects> findAllObjects();
 
-    public Optional<Objects> findById(Long id);
+    public Objects findById(Long id);
     public List<Objects> findByCategory(String category);
 
 }

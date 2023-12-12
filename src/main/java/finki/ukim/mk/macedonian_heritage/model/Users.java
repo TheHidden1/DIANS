@@ -1,10 +1,9 @@
 package finki.ukim.mk.macedonian_heritage.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -19,6 +18,8 @@ public class Users {
     private String name;
     @Column(name = "surname")
     private String surname;
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviewList;
 
     public Users(String username, String password, String name, String surname) {
         this.username = username;

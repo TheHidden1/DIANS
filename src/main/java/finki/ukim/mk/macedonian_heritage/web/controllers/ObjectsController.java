@@ -27,8 +27,8 @@ public class ObjectsController {
         return new ResponseEntity<List<Objects>>(objectsServices.findAllObjects(), HttpStatus.OK);
     }
     @GetMapping(value="/objects/id/{id}", produces = "application/JSON")
-    public ResponseEntity<Optional<Objects>> getById(@PathVariable(name = "id") long id){
-        return new ResponseEntity<>(objectsServices.findById(id), HttpStatus.OK);
+    public ResponseEntity<Objects> getById(@PathVariable(name = "id") long id){
+        return new ResponseEntity<Objects> (objectsServices.findById(id), HttpStatus.OK);
     }
     @GetMapping(value = "/objects/category/{category}", produces = "application/JSON")
     public ResponseEntity<List<Objects>> getByCategory(@PathVariable(name = "category") String category){

@@ -23,8 +23,8 @@ public class ObjectsServicesImpl implements ObjectsServices {
     }
 
     @Override
-    public Optional<Objects> findById(Long id) {
-        return Optional.ofNullable(objectsRepository.findById(id));
+    public Objects findById(Long id) {
+        return objectsRepository.findById(id);
     }
 
     //categories : attraction, artwork, viewpoint, museum
