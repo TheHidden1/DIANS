@@ -31,6 +31,9 @@ public class AuthController {
             Cookie sessionCookie = new Cookie("sessionToken", sessionToken);
             sessionCookie.setMaxAge(30 * 60); // 30 minutes timeout
             sessionCookie.setPath("/"); // Cookie is accessible from all paths in your application
+
+            sessionCookie.setSecure(true);
+
             response.addCookie(sessionCookie);
 
             return ResponseEntity.ok(user);
