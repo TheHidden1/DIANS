@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @Validated
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 @RequestMapping(name="All Objects", value = "/api/v1/")
 public class ObjectsController {
     private final ObjectsServices objectsServices;

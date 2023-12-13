@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "http://localhost:8080/", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:5174/", allowCredentials = "true")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 
@@ -27,8 +29,8 @@ public class AuthController {
         try  {
             System.out.println("Received login request. Username: " + username + ", Password: " + password);
             Users user= authService.login(username, password);
-            String sessionToken = generateSessionToken();
-            Cookie sessionCookie = new Cookie("sessionToken", sessionToken);
+            String token = generateSessionToken();
+            Cookie sessionCookie = new Cookie("token", token);
             sessionCookie.setMaxAge(30 * 60); // 30 minutes timeout
             sessionCookie.setPath("/"); // Cookie is accessible from all
 ////
@@ -39,7 +41,7 @@ public class AuthController {
             return ResponseEntity.ok(user);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", e.getMessage()));
         }
     }
     private String generateSessionToken() {
