@@ -13,8 +13,8 @@ import static java.lang.Long.parseLong;
 @Table(name="OBJECTS")
 public class Objects {
     @Id
-    @Column(name="ID")
-    private long id;
+    @Column(name="id")
+    private Long id;
     @Column(name="lat")
     private String lat;
     @Column(name="lng")
@@ -26,11 +26,4 @@ public class Objects {
     @OneToMany(mappedBy = "object")
     private List<Review> reviewList;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }
