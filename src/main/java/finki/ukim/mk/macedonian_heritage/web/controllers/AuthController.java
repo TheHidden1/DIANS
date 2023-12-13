@@ -14,7 +14,7 @@ import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080/", allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 
@@ -30,10 +30,10 @@ public class AuthController {
             String sessionToken = generateSessionToken();
             Cookie sessionCookie = new Cookie("sessionToken", sessionToken);
             sessionCookie.setMaxAge(30 * 60); // 30 minutes timeout
-            sessionCookie.setPath("/"); // Cookie is accessible from all paths in your application
-
-            sessionCookie.setSecure(true);
-
+            sessionCookie.setPath("/"); // Cookie is accessible from all
+////
+////            sessionCookie.setSecure(true);
+//
             response.addCookie(sessionCookie);
 
             return ResponseEntity.ok(user);
