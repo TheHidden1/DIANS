@@ -15,17 +15,17 @@ public class UsersController {
     public UsersController(UsersServices usersServices) {
         this.usersServices = usersServices;
     }
-    @GetMapping("/username/{username}")
+    @GetMapping(value = "/username/{username}", produces = "application/JSON")
     public ResponseEntity<Users> findByUsername(@PathVariable String username){
         return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
-    @PostMapping("/remove/{placeId}")
+    @PostMapping(value = "/remove/{placeId}", produces = "application/JSON")
     public ResponseEntity<Users> removeFavouritePlace(@PathVariable Long placeId,
                                                       @RequestParam String username){
         usersServices.removeFavouritePlace(username, placeId);
         return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
-    @PostMapping("/changePassword")
+    @PostMapping(value = "/changePassword", produces = "application/JSON")
     public ResponseEntity<?> changePassword(@RequestParam String username,
                                                 @RequestParam String oldPassword,
                                                 @RequestParam String newPassword,
