@@ -10,5 +10,6 @@ public interface ObjectsServices {
 
     public Objects findById(Long id);
     public List<Objects> findByCategory(String category);
+    public Optional<Objects> findByName(String name);
 
 }

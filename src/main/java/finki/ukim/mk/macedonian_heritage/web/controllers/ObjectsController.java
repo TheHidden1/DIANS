@@ -33,4 +33,9 @@ public class ObjectsController {
     public ResponseEntity<List<Objects>> getByCategory(@PathVariable(name = "category") String category){
         return new ResponseEntity<>(objectsServices.findByCategory(category), HttpStatus.OK);
     }
+    @GetMapping(value = "/objects/name/{name}", produces = "application/JSON")
+    public ResponseEntity<Objects> getByName(@PathVariable(name = "name") String name){
+        Optional<Objects> object= objectsServices.findByName(name);
+        return object.map(objects -> new ResponseEntity<>(objects, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }

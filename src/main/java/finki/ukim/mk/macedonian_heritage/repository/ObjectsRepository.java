@@ -17,4 +17,6 @@ public interface ObjectsRepository extends JpaRepository<Objects, Integer> {
 
     @Query("select  o from Objects o where o.id= :id")
     Objects findById(Long id);
+
+    Objects findByName(String name);
 }

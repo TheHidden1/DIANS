@@ -33,4 +33,9 @@ public class ObjectsServicesImpl implements ObjectsServices {
         return objectsRepository.findbyCategory(category);
     }
 
+    @Override
+    public Optional<Objects> findByName(String name) {
+        return Optional.of(objectsRepository.findByName(name));
+    }
+
 }

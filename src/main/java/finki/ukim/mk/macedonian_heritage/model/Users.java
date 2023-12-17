@@ -20,6 +20,8 @@ public class Users {
     private String surname;
     @OneToMany(mappedBy = "user")
     private List<Review> reviewList;
+    @OneToMany
+    private List<Objects> favouritePlaces;
 
     public Users(String username, String password, String name, String surname) {
         this.username = username;
