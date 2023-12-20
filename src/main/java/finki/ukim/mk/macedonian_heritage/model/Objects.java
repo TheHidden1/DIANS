@@ -23,6 +23,8 @@ public class Objects {
     private String name;
     @Column(name="tourism")
     private String category;
+    @Column(name = "description")
+    private String description;
     @OneToMany(mappedBy = "object")
     private List<Review> reviewList;
 
