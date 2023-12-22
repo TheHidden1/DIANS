@@ -21,10 +21,11 @@ public class ReviewController {
     @PostMapping(value = "/create")
     public ResponseEntity<Review> createReview(@RequestBody Map<String, String> requestBody) {
         String body =  requestBody.get("body");
+        Double rating= Double.parseDouble(requestBody.get("rating"));
         Long id = Long.parseLong(requestBody.get("id"));
         String username =  requestBody.get("username");
 
-        Review review = reviewService.createReview(body, id, username);
+        Review review = reviewService.createReview(body, rating, id, username);
 
         if (review != null) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

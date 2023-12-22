@@ -12,6 +12,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String body;
+    private Double rating;
     @JsonIgnore
     @ManyToOne
     private Objects object;
@@ -20,9 +21,10 @@ public class Review {
     private Users user;
 
     public Review(){}
-    public Review(String body, Objects object, Users user) {
+    public Review(String body, Double rating,Objects object, Users user) {
         this.body = body;
         this.object = object;
         this.user = user;
+        this.rating=rating;
     }
 }

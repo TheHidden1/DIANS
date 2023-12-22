@@ -22,11 +22,26 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review createReview(String body, Long objectId, String username) {
+    public Review createReview(String body, Double rating, Long objectId, String username) {
         Objects object = objectsServices.findById(objectId);
         Users user = authRepository.findByUsername(username);
-        Review review = new Review(body, object, user);
-
+        Review review = new Review(body, rating, object, user);
+        object.getReviewList().add(review);
+        object.setRating(RatingObject(rating, objectId));
         return reviewRepository.save(review);
+    }
+
+    private double RatingObject(Double rating, Long objectId) {
+        Objects object = objectsServices.findById(objectId);
+        if (object.getRating()==null || object.getRating() == 0) {
+            return rating;
+        } else {
+            double sum=0.0;
+            System.out.println(object.getReviewList().size());
+            for(Review r : object.getReviewList()){
+                sum+=r.getRating();
+            }
+            return Math.round((sum/object.getReviewList().size())*10.0)/10.0;
+        }
     }
 }
