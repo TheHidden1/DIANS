@@ -25,6 +25,7 @@ public class Objects {
     private String category;
     @Column(name = "description")
     private String description;
+    private Double rating;
     @OneToMany(mappedBy = "object")
     private List<Review> reviewList;
 
