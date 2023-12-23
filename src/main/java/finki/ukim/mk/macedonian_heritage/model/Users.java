@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,8 +21,8 @@ public class Users {
     private String surname;
     @OneToMany(mappedBy = "user")
     private List<Review> reviewList;
-    @OneToMany
-    private List<Objects> favouritePlaces;
+    @ManyToMany
+    private Set<Objects> favouritePlaces;
 
     public Users(String username, String password, String name, String surname) {
         this.username = username;

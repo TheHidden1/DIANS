@@ -9,6 +9,8 @@ import finki.ukim.mk.macedonian_heritage.services.ObjectsServices;
 import finki.ukim.mk.macedonian_heritage.services.ReviewService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReviewServiceImpl implements ReviewService {
     public final ReviewRepository reviewRepository;
@@ -29,6 +31,12 @@ public class ReviewServiceImpl implements ReviewService {
         object.getReviewList().add(review);
         object.setRating(RatingObject(rating, objectId));
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public List<Review> findByObject(Long objectId) {
+        Objects objects= objectsServices.findById(objectId);
+        return reviewRepository.findByObject(objects);
     }
 
     private double RatingObject(Double rating, Long objectId) {

@@ -19,6 +19,7 @@ public class Review {
     @JsonIgnore
     @ManyToOne
     private Users user;
+    private String username;
 
     public Review(){}
     public Review(String body, Double rating,Objects object, Users user) {
@@ -26,5 +27,6 @@ public class Review {
         this.object = object;
         this.user = user;
         this.rating=rating;
+        this.username=user.getName();
     }
 }
