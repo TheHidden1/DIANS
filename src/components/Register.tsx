@@ -1,5 +1,7 @@
 import { useState } from "react";
 import logoUrl from "../assets/images/logo.png";
+import axios from "axios";
+import qs from 'qs'
 
 export default function Register() {
     const [firstName, setFirstName] = useState("")
@@ -8,16 +10,52 @@ export default function Register() {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [error, setError] = useState("")
-    function doLogin(){
-        const apiResponse = username === "ace" && password === "123" && confirmPassword === "123"
-        if(apiResponse) {
-            setError("")
-            window.location.pathname='/login'
+
+    
+    const doRegister = async (e: { preventDefault: () => void; }) => {
+      e.preventDefault();
+
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
+
+      try {
+        const data = qs.stringify({
+          'username': username,
+          'password': password,
+          'repeatPassword': confirmPassword,
+          'name': firstName,
+          'surname': lastName
+        });
+
+        const config = {
+          method: 'post',
+          maxBodyLength: Infinity,
+          url: 'https://mht-back-end-deployment.azurewebsites.net/api/v1/auth/register',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Cookie': 'ARRAffinity=a6e48b9e9d2653435be7b61998d8624b44115214104213d6c8b8c526cc56dc70; ARRAffinitySameSite=a6e48b9e9d2653435be7b61998d8624b44115214104213d6c8b8c526cc56dc70'
+          },
+          data: data
+        };
+
+        const response = await axios.request(config);
+
+        if (response.status === 200) {
+          console.log("Registration successful");
+          setError("");
+          window.location.pathname = '/login'
+        } else {
+          console.error("Registration failed: ", response.statusText);
+          setError("Registration failed. Please try again.");
         }
-        else{
-            setError("Error logging in")
-        }
-    }
+      } catch (error) {
+        console.error("Error during registration", error);
+        setError("An error has occured during registration. Please try again later.");
+      }
+    };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-4 lg:px-8">
@@ -150,7 +188,7 @@ export default function Register() {
             <div>
               <button
                 type="button"
-                onClick={doLogin}
+                onClick={doRegister}
                 className="flex w-full justify-center rounded-md bg-yellow-800 mb-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Register

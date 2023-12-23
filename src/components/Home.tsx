@@ -3,8 +3,8 @@ import homePageImg from "../assets/images/kaneo.jpg";
 import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const navigate = useNavigate();
-  const navigateAbout = () => {
-    navigate('/about');
+  const navigateMap = () => {
+    navigate('/map');
   }
   return (
     <div
@@ -42,7 +42,7 @@ const Home = () => {
               fontSize: "clamp(16px, 20px, 30px)",
             }}
             className="text-yellow-700"
-            onClick={navigateAbout}
+            onClick={navigateMap}
           >
             Дознај повеќе
           </button>

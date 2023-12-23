@@ -1,22 +1,52 @@
-import Cookies from "js-cookie";
 import { useState } from "react";
 import logoUrl from "../assets/images/logo.png"
+import axios from "axios";
+import qs from "qs";
+import Cookies from 'js-cookie';
 
 export default function Login() {
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [error, setError] = useState("")
-    function doLogin(){
-        const apiResponse = username === "test" && password === "123"
-        if(apiResponse) {
-            setError("")
-            Cookies.set("token", "123")
-            window.location.pathname='/map'
-        }
-        else{
-            setError("Error logging in")
-        }
+  const [username, setUsername] = useState(Cookies.get("username"))
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const doLogin = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try {
+      const data = qs.stringify({
+        'username': username,
+        'password': password
+      });
+
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://mht-back-end-deployment.azurewebsites.net/api/v1/auth/login',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: data,
+        withCredentials: true,
+      };
+
+      const response = await axios.request(config);
+      console.log(response)
+
+      if (response.status === 200) {
+        const token = response.data.token;
+        Cookies.set('token', token);
+        Cookies.set('username', response.data.username)
+        setError("");
+        window.location.pathname = '/map';
+      } else {
+        console.error('Login failed:', response.data.message);
+        setError(`Login failed: ${response.data.message}`);
+      }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error : any) {
+      setError(error.response.data.message);
     }
+  }
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -48,7 +78,7 @@ export default function Login() {
                   autoComplete="email"
                   required
                   value={username}
-                  onChange={(e) => {setUsername(e.target.value)}}
+                  onChange={(e) => { setUsername(e.target.value) }}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -71,7 +101,7 @@ export default function Login() {
                   autoComplete="current-password"
                   required
                   value={password}
-                  onChange={(e) => {setPassword(e.target.value)}}
+                  onChange={(e) => { setPassword(e.target.value) }}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
