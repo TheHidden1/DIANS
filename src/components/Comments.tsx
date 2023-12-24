@@ -23,7 +23,7 @@ const useUserComments = () => {
 
     const postUserComment = async (commentInput: string, rating: number, locationId: number) => {
         try {
-            const response = await axios.post<Comment[]>('http://13.53.87.95:9090/api/v1/review/create', {
+            const response = await axios.post<Comment[]>('https://mht-back-end-deployment.azurewebsites.net/api/v1/review/create', {
                 body: commentInput,
                 rating: rating,
                 id: locationId,

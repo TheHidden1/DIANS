@@ -93,7 +93,7 @@ const MapPage = () => {
   }
 
   const fetchData = async () => {
-    const response = await axios.get("http://13.53.87.95:9090/api/v1/objects");
+    const response = await axios.get("https://mht-back-end-deployment.azurewebsites.net/api/v1/objects");
     await timeout(500)
     const tmp: Location[] = [];
     const data = response.data;

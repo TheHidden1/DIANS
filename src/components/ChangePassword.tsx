@@ -24,7 +24,7 @@ export default function ChangePassword() {
                 repeatPassword: confirmNewPassword,
             };
 
-            const changePasswordResponse = await axios.post(`http://13.53.87.95:9090/api/v1/user/changePassword?username=${changePasswordData.username}&oldPassword=${changePasswordData.oldPassword}&newPassword=${changePasswordData.newPassword}&repeatPassword=${changePasswordData.repeatPassword}`);
+            const changePasswordResponse = await axios.post(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/changePassword?username=${changePasswordData.username}&oldPassword=${changePasswordData.oldPassword}&newPassword=${changePasswordData.newPassword}&repeatPassword=${changePasswordData.repeatPassword}`);
 
             if (changePasswordResponse.status === 200) {
                 setError("");

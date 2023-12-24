@@ -44,7 +44,7 @@ const Attraction: React.FC = () => {
 
     const getObject = async () => {
         try {
-            const response = await axios.get<ObjectData>(`http://13.53.87.95:9090/api/v1/objects/id/${id}`);
+            const response = await axios.get<ObjectData>(`https://mht-back-end-deployment.azurewebsites.net/api/v1/objects/id/${id}`);
             setObjectData(response.data);
         } catch (error) {
             console.error("Error fetching location data: ", error);

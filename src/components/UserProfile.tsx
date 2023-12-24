@@ -15,7 +15,7 @@ interface UserProfile {
 
 const useUserProfile = (username: string) => {
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-    const apiUrl = `http://13.53.87.95:9090/api/v1/user/username/${username}`;
+    const apiUrl = `https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/${username}`;
 
     useEffect(() => {
         const fetchUserProfile = async () => {
