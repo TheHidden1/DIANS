@@ -6,6 +6,10 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
 import UserGeoLocation from "./UserGeoLocation";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine";
+// import useRoutingControl from "./Routing";
 
 interface APILocation {
   id: number,
@@ -59,6 +63,8 @@ const MapPage = () => {
   const [locateMeClicked, setLocateMeClicked] = useState(false);
   console.log("userlocation", userlocation);
 
+  // const [routeControl, setRouteControl] = useState<L.Routing.Control | null>(null);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -69,8 +75,8 @@ const MapPage = () => {
 
   const searchByName = () => {
     const filtered = locations.filter((location) => location.name.toLowerCase().includes(searchName.toLowerCase()));
-    if(filtered.length>0)
-      window.location.href = '/attraction?id='+filtered[0].id
+    if (filtered.length > 0)
+      window.location.href = '/attraction?id=' + filtered[0].id
   }
 
   const getIcon = (type: string): L.Icon => {
@@ -132,22 +138,71 @@ const MapPage = () => {
       });
       setTimeout(() => {
         setLocateMeClicked(false);
-      }, 3000); // 3000 milliseconds = 3 seconds
+      }, 30000);
 
     }
   };
 
-  const findRoute = () => {
-    
-  };
-  
+  // const MapComponent = () => {
+  //   const attractionCoordinates = {
+  //     lat: filteredLocations[0].lat,
+  //     lng: filteredLocations[0].lng,
+  //   };
+
+  //   const userLocationCoordinates = userlocation.loaded && !userlocation.error
+  //     ? {
+  //       lat: parseFloat(userlocation.coordinates.lat),
+  //       lng: parseFloat(userlocation.coordinates.lng),
+  //     }
+  //     : null;
+
+  //   setRouteControl(useRoutingControl(mapRef, userLocationCoordinates, attractionCoordinates));
+
+  //   useEffect(() => {
+  //     if (routeControl) {
+  //       routeControl.route();
+  //     }
+  //   }, [routeControl]);
+
+  //   return null;
+  // };
+
+
+
+  // const findRoute = () => {
+  //   if (
+  //     mapRef.current &&
+  //     userlocation.loaded &&
+  //     !userlocation.error &&
+  //     filteredLocations.length > 0
+  //   ) {
+  //     const userLocationLatLng = L.latLng(
+  //       parseFloat(userlocation.coordinates.lat),
+  //       parseFloat(userlocation.coordinates.lng)
+  //     );
+  //     const attractionLatLng = L.latLng(
+  //       filteredLocations[0].lat,
+  //       filteredLocations[0].lng
+  //     );
+
+  //     const control = L.Routing.control({
+  //       waypoints: [userLocationLatLng, attractionLatLng],
+  //       routeWhileDragging: true,
+  //     });
+
+  //     setRouteControl(control);
+  //   }
+  // };
+
+
+
   return fetched ? (
     <div className="flex flex-row w-full fullPageDiv">
       <div className="flex">
         <ul className="text-xl m-[32px] text-yellow-800 my-auto flex flex-col space-y-6 text-center">
           <h2 className="text-3xl">Categories:</h2>
           <li>
-            <a href="#" onClick={() => handleTypeChange("attraction")} className={selectedFilter === "attraction"?"text-yellow-600":""}>Attraction</a>
+            <a href="#" onClick={() => handleTypeChange("attraction")} className={selectedFilter === "attraction" ? "text-yellow-600" : ""}>Attraction</a>
           </li>
           <li>
             <a href="#" onClick={() => handleTypeChange("artwork")} className={selectedFilter === "artwork" ? "text-yellow-600" : ""}>Artwork</a>
@@ -194,7 +249,7 @@ const MapPage = () => {
               key={0}
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-
+            
             {filteredLocations.map((attraction) => (
               <Marker
                 position={[attraction.lat, attraction.lng]}
@@ -222,9 +277,9 @@ const MapPage = () => {
                       >
                         Read More
                       </button>
-                      <button type="button" onClick={() => { findRoute() }} className="text-white bg-yellow-800 hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm mt-2 px-3 py-1.5 me-2 mb-2 dark:bg-yellow-800 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-blue-800">
+                      {/* <button type="button" onClick={ findRoute } className="text-white bg-yellow-800 hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm mt-2 px-3 py-1.5 me-2 mb-2 dark:bg-yellow-800 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-blue-800">
                         Find Route
-                      </button>
+                      </button> */}
                     </div>
                   )}
                 </Popup>

@@ -10,6 +10,7 @@ import Navbar from './components/partial/Navbar'
 import ProtectedRoute from './components/partial/ProtectedRoute'
 import Attraction from './components/Attraction'
 import ViewProfile from './components/ViewProfile'
+import ChangePassword from './components/ChangePassword'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/changepassword' element={<ChangePassword />} />
           <Route path='/map' element={<ProtectedRoute component={MapPage} />} />
           <Route path='/attraction' element={<ProtectedRoute component={Attraction} />} />
           <Route path='/viewprofile' element={<ViewProfile/>} />

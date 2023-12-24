@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 interface Comment {
+    id: number,
     username: string,
     body: string,
     rating: number,
@@ -16,9 +17,9 @@ interface Comment {
     }
 }
 
-const useUserComments = (username: string) => {
-    const [ userComments, setUserComments ] = useState<Comment[]>([]);
-    const [ userName ] = useState<string | undefined>(Cookies.get('username'))
+const useUserComments = () => {
+    const [userComments, setUserComments] = useState<Comment[]>([]);
+    const [userName] = useState<string | undefined>(Cookies.get('username'))
 
     const postUserComment = async (commentInput: string, rating: number, locationId: number) => {
         try {
@@ -26,7 +27,7 @@ const useUserComments = (username: string) => {
                 body: commentInput,
                 rating: rating,
                 id: locationId,
-                username: username,
+                username: userName,
             });
 
             setUserComments(response.data);

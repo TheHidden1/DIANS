@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { parseNumbers } from 'xml2js/lib/processors';
 
 interface ObjectData {
+    id: string;
     name: string;
     category: string;
     description: string;
@@ -16,20 +18,18 @@ const useBookmark = (username: string, objectData: ObjectData | null) => {
         }
 
         try {
-            const userFavorites = await axios.get<string[]>(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/${username}`);
-            const isCurrentlyBookmarked = userFavorites.data.includes(objectData.name);
+            const endpoint = isBookmarked
+                ? 'remove'
+                : 'add';
 
-            if (isCurrentlyBookmarked) {
-                await axios.delete(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/${username}`, {
-                    data: { locationName: objectData.name },
-                });
-            } else {
-                await axios.post(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/${username}`, {
-                    locationName: objectData.name,
-                });
-            }
+            await axios.post(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/${endpoint}`, {
 
-            setIsBookmarked(!isCurrentlyBookmarked);
+                placeId: parseNumbers(objectData.id),
+                username: username,
+
+            });
+
+            setIsBookmarked(!isBookmarked);
         } catch (error) {
             console.error('Error toggling bookmark: ', error);
         }

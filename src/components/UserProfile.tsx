@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+interface FavoritePlace {
+    name: string;
+    rating: number;
+}
+
 interface UserProfile {
     name: string;
     surname: string;
     username: string;
+    favouritePlaces: FavoritePlace[];
 }
 
 const useUserProfile = (username: string) => {
