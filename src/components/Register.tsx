@@ -32,7 +32,7 @@ export default function Register() {
         const config = {
           method: 'post',
           maxBodyLength: Infinity,
-          url: 'https://mht-back-end-deployment.azurewebsites.net/api/v1/auth/register',
+          url: 'http://13.53.87.95:9090/api/v1/auth/register',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Cookie': 'ARRAffinity=a6e48b9e9d2653435be7b61998d8624b44115214104213d6c8b8c526cc56dc70; ARRAffinitySameSite=a6e48b9e9d2653435be7b61998d8624b44115214104213d6c8b8c526cc56dc70'

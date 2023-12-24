@@ -22,7 +22,7 @@ const useBookmark = (username: string, objectData: ObjectData | null) => {
                 ? 'remove'
                 : 'add';
 
-            await axios.post(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/${endpoint}`, {
+            await axios.post(`http://13.53.87.95:9090/api/v1/user/${endpoint}`, {
 
                 placeId: parseNumbers(objectData.id),
                 username: username,

@@ -20,7 +20,7 @@ export default function Login() {
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://mht-back-end-deployment.azurewebsites.net/api/v1/auth/login',
+        url: 'http://13.53.87.95:9090/api/v1/auth/login',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },

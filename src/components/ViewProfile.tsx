@@ -9,7 +9,7 @@ const Profile = () => {
     const [favorites, setFavorites] = useState<Array<string>>([]);
 
     const getPlaces = async () => {
-        const apiUrl = 'https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/' + username;
+        const apiUrl = 'http://13.53.87.95:9090/api/v1/user/username/' + username;
 
         axios.get(apiUrl)
             .then(response => {
@@ -35,7 +35,7 @@ const Profile = () => {
 
     const removeFavorite = async (locationId: string, username: string) => {
         try {
-            const apiUrl = `https://mht-back-end-deployment.azurewebsites.net/api/v1/user/remove?placeId=${locationId}&username=${username}`;
+            const apiUrl = `http://13.53.87.95:9090/api/v1/user/remove?placeId=${locationId}&username=${username}`;
             await axios.post(apiUrl);
             getPlaces();
         } catch (error) {
