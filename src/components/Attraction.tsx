@@ -64,6 +64,7 @@ const Attraction: React.FC = () => {
       console.error("Error writing review: ", error);
     }
   }
+  // AAAA
 
   const clearInput = async () => {
     handleStarClick(0);
