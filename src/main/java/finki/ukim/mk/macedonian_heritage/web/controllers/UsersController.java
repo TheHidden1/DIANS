@@ -27,8 +27,8 @@ public class UsersController {
     @PostMapping(value = "/add", produces = "application/JSON")
     public ResponseEntity<Users> addFavouritePlace(@RequestParam Long placeId,
                                                    @RequestParam String username){
-
-        return new ResponseEntity<>(usersServices.addToFavouritePlace(username, placeId), HttpStatus.OK);
+        usersServices.addToFavouritePlace(username, placeId);
+        return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
     @PostMapping(value = "/remove", produces = "application/JSON")
     public ResponseEntity<Users> removeFavouritePlace(@RequestParam Long placeId,
