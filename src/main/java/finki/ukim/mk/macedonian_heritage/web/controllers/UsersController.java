@@ -25,12 +25,10 @@ public class UsersController {
         return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
     @PostMapping(value = "/add", produces = "application/JSON")
-    public ResponseEntity<Users> addFavouritePlace(@RequestBody Map<String, Object> requestBody){
-        Long placeId = ((Number) requestBody.get("placeId")).longValue();
-        String username = (String) requestBody.get("username");
+    public ResponseEntity<Users> addFavouritePlace(@RequestParam Long placeId,
+                                                   @RequestParam String username){
 
         return new ResponseEntity<>(usersServices.addToFavouritePlace(username, placeId), HttpStatus.OK);
-
     }
     @PostMapping(value = "/remove", produces = "application/JSON")
     public ResponseEntity<Users> removeFavouritePlace(@RequestParam Long placeId,
