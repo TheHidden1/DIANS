@@ -16,10 +16,12 @@ public class ObjectsServicesImpl implements ObjectsServices {
     public ObjectsServicesImpl(ObjectsRepository objectsRepository) {
         this.objectsRepository = objectsRepository;
     }
+
+    //findAllObjects() Gi naogja site objekti i filtrira nepravilni iminja koi sodrzat "?"
     @Override
     public List<Objects> findAllObjects() {
         return objectsRepository.findAll().stream()
-                .filter(i->!i.getName().contains("?")).toList();
+                .filter(i -> !i.getName().contains("?")).toList();
     }
 
     @Override

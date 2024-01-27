@@ -20,34 +20,38 @@ public class UsersController {
         this.usersServices = usersServices;
         this.objectsServices = objectsServices;
     }
+
     @GetMapping(value = "/username/{username}", produces = "application/JSON")
-    public ResponseEntity<Users> findByUsername(@PathVariable String username){
+    public ResponseEntity<Users> findByUsername(@PathVariable String username) {
         return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
+
     @PostMapping(value = "/add", produces = "application/JSON")
     public ResponseEntity<Users> addFavouritePlace(@RequestParam Long placeId,
-                                                   @RequestParam String username){
+                                                   @RequestParam String username) {
         usersServices.addToFavouritePlace(username, placeId);
         return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
+
     @PostMapping(value = "/remove", produces = "application/JSON")
     public ResponseEntity<Users> removeFavouritePlace(@RequestParam Long placeId,
-                                                      @RequestParam String username){
+                                                      @RequestParam String username) {
         usersServices.removeFavouritePlace(username, placeId);
         return new ResponseEntity<>(usersServices.findByUsername(username), HttpStatus.OK);
     }
+
     @PostMapping(value = "/changePassword", produces = "application/JSON")
     public ResponseEntity<?> changePassword(@RequestParam String username,
-                                                @RequestParam String oldPassword,
-                                                @RequestParam String newPassword,
-                                                @RequestParam String repeatPassword){
+                                            @RequestParam String oldPassword,
+                                            @RequestParam String newPassword,
+                                            @RequestParam String repeatPassword) {
 
-        try{
+        try {
             System.out.printf("Received change password for %s %s", username, oldPassword);
-            usersServices.changePassword(username, oldPassword,newPassword, repeatPassword);
-            Users user= usersServices.findByUsername(username);
+            usersServices.changePassword(username, oldPassword, newPassword, repeatPassword);
+            Users user = usersServices.findByUsername(username);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }

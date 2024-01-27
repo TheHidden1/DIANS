@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ObjectsServices {
-    public List<Objects> findAllObjects();
+    List<Objects> findAllObjects();
 
-    public Objects findById(Long id);
-    public List<Objects> findByCategory(String category);
-    public Optional<Objects> findByName(String name);
+    Objects findById(Long id);
+
+    List<Objects> findByCategory(String category);
+
+    Optional<Objects> findByName(String name);
 
 }

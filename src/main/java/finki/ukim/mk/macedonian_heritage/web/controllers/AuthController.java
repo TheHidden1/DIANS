@@ -15,8 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-//@CrossOrigin(origins = "http://localhost:5174/", allowCredentials = "true")
-//@CrossOrigin(origins = "http://localhost:5173/")
+
 public class AuthController {
     private final AuthService authService;
 
@@ -25,28 +24,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletResponse response, @RequestParam String username, @RequestParam String password){
-        try  {
+    public ResponseEntity<?> login(HttpServletResponse response, @RequestParam String username, @RequestParam String password) {
+        try {
             System.out.println("Received login request. Username: " + username + ", Password: " + password);
-            Users user= authService.login(username, password);
+            Users user = authService.login(username, password);
             String token = generateSessionToken();
             Cookie sessionCookie = new Cookie("token", token);
             sessionCookie.setMaxAge(30 * 60); // 30 minutes timeout
-            sessionCookie.setPath("/"); // Cookie is accessible from all
-////
-////            sessionCookie.setSecure(true);
-//
+            sessionCookie.setPath("/"); // Cookie priptano do site pateki
+
             response.addCookie(sessionCookie);
 
             return ResponseEntity.ok(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", e.getMessage()));
         }
     }
+
     private String generateSessionToken() {
-        // Generate a secure session token using SecureRandom and Base64 encoding
-        byte[] randomBytes = new byte[32]; // You can adjust the size based on your security requirements
+        // Generiranje token za bezbednosna sesija so pomos na SecureRandom
+        byte[] randomBytes = new byte[32];
         new SecureRandom().nextBytes(randomBytes);
         return Base64.getEncoder().encodeToString(randomBytes);
     }
@@ -57,11 +55,11 @@ public class AuthController {
             @RequestParam String password,
             @RequestParam String repeatPassword,
             @RequestParam String name,
-            @RequestParam String surname){
+            @RequestParam String surname) {
         try {
-            Users user= authService.register(username, password, repeatPassword, name, surname);
+            Users user = authService.register(username, password, repeatPassword, name, surname);
             return ResponseEntity.ok(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

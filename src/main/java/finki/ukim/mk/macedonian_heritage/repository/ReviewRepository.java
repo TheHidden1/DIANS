@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Review save(Review review);
+
     List<Review> findByObject(Objects object);
 }

@@ -12,8 +12,5 @@ public interface AuthRepository extends JpaRepository<Users, String> {
     @Query("SELECT u FROM Users u WHERE u.username = :username AND u.password= :password")
     Users login(String username, String password);
 
-    @Override
-    <S extends Users> S save(S entity);
-
     Users findByUsername(String username);
 }

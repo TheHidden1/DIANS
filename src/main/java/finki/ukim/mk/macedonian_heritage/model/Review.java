@@ -21,12 +21,14 @@ public class Review {
     private Users user;
     private String username;
 
-    public Review(){}
-    public Review(String body, Double rating,Objects object, Users user) {
+    public Review() {
+    }
+
+    public Review(String body, Double rating, Objects object, Users user) {
         this.body = body;
         this.object = object;
         this.user = user;
-        this.rating=rating;
-        this.username=user.getName();
+        this.rating = rating;
+        this.username = user.getName();
     }
 }

@@ -22,13 +22,13 @@ public class AuthServiceImpl implements AuthService {
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             throw new InvalidArgumentsException();
         }
-        if(authRepository.findByUsername(username) == null){
+        if (authRepository.findByUsername(username) == null) {
             throw new UserNotFoundException();
         }
-        Users user=authRepository.login(username, password);
-        if(user==null){
+        Users user = authRepository.login(username, password);
+        if (user == null) {
             throw new InvalidUserCredentialsException();
-        }else {
+        } else {
             return user;
         }
     }
@@ -38,8 +38,7 @@ public class AuthServiceImpl implements AuthService {
         if (username == null || username.isEmpty() ||
                 password == null || password.isEmpty() ||
                 name == null || name.isEmpty() ||
-                surname == null || surname.isEmpty())
-        {
+                surname == null || surname.isEmpty()) {
             throw new InvalidArgumentsException();
         }
         if (!password.equals(repeatPassword)) {

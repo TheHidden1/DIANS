@@ -11,22 +11,21 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(name="All Objects", value = "/api/v1/review")
+@RequestMapping(name = "All Objects", value = "/api/v1/review")
 public class ReviewController {
     private final ReviewService reviewService;
-    private final ObjectsServices objectsServices;
 
-    public ReviewController(ReviewService reviewService, ObjectsServices objectsServices) {
+
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
-        this.objectsServices = objectsServices;
     }
 
     @PostMapping(value = "/create")
     public ResponseEntity<List<Review>> createReview(@RequestBody Map<String, String> requestBody) {
-        String body =  requestBody.get("body");
-        Double rating= Double.parseDouble(requestBody.get("rating"));
+        String body = requestBody.get("body");
+        Double rating = Double.parseDouble(requestBody.get("rating"));
         Long id = Long.parseLong(requestBody.get("id"));
-        String username =  requestBody.get("username");
+        String username = requestBody.get("username");
 
         Review review = reviewService.createReview(body, rating, id, username);
         if (review != null) {

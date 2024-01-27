@@ -5,6 +5,6 @@ import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsersRepository extends JpaRepository<Users, String> {
-    public Users findByUsername(String username);
+    Users findByUsername(String username);
 
 }

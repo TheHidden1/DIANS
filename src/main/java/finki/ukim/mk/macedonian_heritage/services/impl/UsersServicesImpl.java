@@ -26,7 +26,7 @@ public class UsersServicesImpl implements UsersServices {
 
     @Override
     public Users addToFavouritePlace(String username, Long placeId) {
-        Users users= usersRepository.findByUsername(username);
+        Users users = usersRepository.findByUsername(username);
         Objects object = objectsServices.findById(placeId);
         users.getFavouritePlaces().add(object);
         return usersRepository.save(users);
@@ -35,8 +35,8 @@ public class UsersServicesImpl implements UsersServices {
     @Override
     public void removeFavouritePlace(String username, Long placeId) {
         Objects object = objectsServices.findById(placeId);
-        Users user= usersRepository.findByUsername(username);
-        if(user != null){
+        Users user = usersRepository.findByUsername(username);
+        if (user != null) {
             user.getFavouritePlaces().remove(object);
             usersRepository.save(user);
         }
@@ -45,15 +45,16 @@ public class UsersServicesImpl implements UsersServices {
     @Override
     public void changePassword(String username, String oldPassword,
                                String newPassword, String repeatPassword) {
-        Users user= usersRepository.findByUsername(username);
-        if(oldPassword.equals(user.getPassword())){
-            if(newPassword.equals(repeatPassword)){
+
+        Users user = usersRepository.findByUsername(username);
+        if (oldPassword.equals(user.getPassword())) {
+            if (newPassword.equals(repeatPassword)) {
                 user.setPassword(newPassword);
                 usersRepository.save(user);
-            }else {
+            } else {
                 throw new PasswordsDoNotMatch();
             }
-        }else {
+        } else {
             throw new IncorectOldPassword();
         }
     }

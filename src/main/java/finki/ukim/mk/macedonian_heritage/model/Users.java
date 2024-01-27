@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name="users")
+@Table(name = "users")
 public class Users {
     @Id
     @Column(name = "username")
@@ -31,5 +31,6 @@ public class Users {
         this.surname = surname;
     }
 
-    public Users() {}
+    public Users() {
+    }
 }

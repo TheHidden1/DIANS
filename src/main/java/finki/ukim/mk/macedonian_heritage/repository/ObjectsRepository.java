@@ -9,13 +9,12 @@ import java.util.List;
 
 public interface ObjectsRepository extends JpaRepository<Objects, Integer> {
 
-    @Query("select a from Objects a")
     List<Objects> findAll();
 
     @Query("select o from Objects o where o.category = :category")
     List<Objects> findbyCategory(String category);
 
-    @Query("select  o from Objects o where o.id= :id")
+
     Objects findById(Long id);
 
     Objects findByName(String name);
