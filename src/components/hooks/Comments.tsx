@@ -23,7 +23,7 @@ const useUserComments = () => {
 
     const postUserComment = async (commentInput: string, rating: number, locationId: number) => {
         try {
-            const response = await axios.post<Comment[]>('https://mht-back-end-deployment.azurewebsites.net/api/v1/review/create', {
+            const response = await axios.post<Comment[]>(import.meta.env.VITE_APP_BASE_URL + '/api/v1/review/create', {
                 body: commentInput,
                 rating: rating,
                 id: locationId,

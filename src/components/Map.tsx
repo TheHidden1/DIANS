@@ -5,7 +5,7 @@ import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
-import UserGeoLocation from "./UserGeoLocation";
+import UserGeoLocation from "./hooks/UserGeoLocation";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
@@ -53,6 +53,7 @@ const monumentIcon: L.Icon = LeafIcon(
 const MapPage = () => {
   const history = useNavigate();
   const mapRef: RefObject<L.Map> = useRef<L.Map>(null);
+  const routingControlRef = useRef<L.Routing.Control | null>(null);
   const [locations, setLocations] = useState<Location[]>([]);
   const [fetched, setFetched] = useState(false);
   const [filteredLocations, setFilteredLocations] = useState<Location[]>(locations);
@@ -61,9 +62,8 @@ const MapPage = () => {
 
   const userlocation = UserGeoLocation();
   const [locateMeClicked, setLocateMeClicked] = useState(false);
+  
   console.log("userlocation", userlocation);
-
-  // const [routeControl, setRouteControl] = useState<L.Routing.Control | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -93,7 +93,7 @@ const MapPage = () => {
   }
 
   const fetchData = async () => {
-    const response = await axios.get("https://mht-back-end-deployment.azurewebsites.net/api/v1/objects");
+    const response = await axios.get(import.meta.env.VITE_APP_BASE_URL + "/api/v1/objects");
     await timeout(500)
     const tmp: Location[] = [];
     const data = response.data;
@@ -113,6 +113,7 @@ const MapPage = () => {
     setFetched(true);
   };
 
+  // Prikazuvanje na lokaciite spored nivnata kategorija (type)
   const handleTypeChange = (type: string | null) => {
     if (type && type != selectedFilter) {
       const filtered = locations.filter((location) => location.type === type);
@@ -124,6 +125,7 @@ const MapPage = () => {
     }
   };
 
+  // Prikazuva momentalna lokacija na korisnikot
   const handleLocateMe = () => {
     if (mapRef.current && userlocation.loaded && !userlocation.error) {
       const userLocationLatLng = L.latLng(
@@ -143,58 +145,27 @@ const MapPage = () => {
     }
   };
 
-  // const MapComponent = () => {
-  //   const attractionCoordinates = {
-  //     lat: filteredLocations[0].lat,
-  //     lng: filteredLocations[0].lng,
-  //   };
+  const navigateToLocation = async (attraction: Location) => {
+      //console.log(attraction);
+      //console.log(userLocationLatLng)
+    if (mapRef.current) {
+      const map = mapRef.current;
+      if (routingControlRef.current) {
+        //routingControlRef.current.setWaypoints([])
+        routingControlRef.current.remove()
+      }
 
-  //   const userLocationCoordinates = userlocation.loaded && !userlocation.error
-  //     ? {
-  //       lat: parseFloat(userlocation.coordinates.lat),
-  //       lng: parseFloat(userlocation.coordinates.lng),
-  //     }
-  //     : null;
+      routingControlRef.current = L.Routing.control({
+        waypoints: [
+          L.latLng(parseFloat(userlocation.coordinates.lat), parseFloat(userlocation.coordinates.lng)),
+          L.latLng(attraction.lat, attraction.lng),
+        ],
+      });
 
-  //   setRouteControl(useRoutingControl(mapRef, userLocationCoordinates, attractionCoordinates));
+      routingControlRef.current.addTo(map);
+    }
 
-  //   useEffect(() => {
-  //     if (routeControl) {
-  //       routeControl.route();
-  //     }
-  //   }, [routeControl]);
-
-  //   return null;
-  // };
-
-
-
-  // const findRoute = () => {
-  //   if (
-  //     mapRef.current &&
-  //     userlocation.loaded &&
-  //     !userlocation.error &&
-  //     filteredLocations.length > 0
-  //   ) {
-  //     const userLocationLatLng = L.latLng(
-  //       parseFloat(userlocation.coordinates.lat),
-  //       parseFloat(userlocation.coordinates.lng)
-  //     );
-  //     const attractionLatLng = L.latLng(
-  //       filteredLocations[0].lat,
-  //       filteredLocations[0].lng
-  //     );
-
-  //     const control = L.Routing.control({
-  //       waypoints: [userLocationLatLng, attractionLatLng],
-  //       routeWhileDragging: true,
-  //     });
-
-  //     setRouteControl(control);
-  //   }
-  // };
-
-
+  };
 
   return fetched ? (
     <div className="flex flex-row w-full fullPageDiv">
@@ -258,7 +229,7 @@ const MapPage = () => {
               >
                 <Popup className="w-[250px]">
                   <h1 className="text-lg font-semibold mb-1">
-                    {attraction.name}
+                    {firstLetterBig(attraction.name)}
                   </h1>
                   {attraction.type !== "yes" && (
                     <h3>
@@ -280,6 +251,13 @@ const MapPage = () => {
                       {/* <button type="button" onClick={ findRoute } className="text-white bg-yellow-800 hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm mt-2 px-3 py-1.5 me-2 mb-2 dark:bg-yellow-800 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-blue-800">
                         Find Route
                       </button> */}
+                      <button type="button" 
+                      onClick={() => {
+                        navigateToLocation(attraction)
+                      }}
+                      className="text-white bg-yellow-800 hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm mt-2 px-3 py-1.5 me-2 mb-2 dark:bg-yellow-800 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-blue-800">
+                        Navigate
+                      </button>
                     </div>
                   )}
                 </Popup>

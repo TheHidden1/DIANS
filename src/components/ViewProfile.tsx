@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -9,7 +10,7 @@ const Profile = () => {
     const [favorites, setFavorites] = useState<Array<string>>([]);
 
     const getPlaces = async () => {
-        const apiUrl = 'https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/' + username;
+        const apiUrl = import.meta.env.VITE_APP_BASE_URL + '/api/v1/user/username/' + username;
 
         axios.get(apiUrl)
             .then(response => {
@@ -49,37 +50,42 @@ const Profile = () => {
 
     return (
         <div className='fullPageDiv flex flex-col'>
-            <div className='w-full mt-10 mb-[-50px]'>
-                <div className='flex flex-col items-center justify-center'>
+            <div className='w-full mt-10'>
+                <div className='text-lg flex flex-col items-center justify-center'>
                     <img src="https://static.vecteezy.com/system/resources/thumbnails/002/534/006/small/social-media-chatting-online-blank-profile-picture-head-and-body-icon-people-standing-icon-grey-background-free-vector.jpg"
                         style={{ aspectRatio: 1 }}
                         className='w-[128px] sm:w-[192px] mb-3 rounded-lg'
                     />
                     <h1>Name: {name} {surname}</h1>
                     <h1>Username: {username}</h1>
-                    <button onClick={changePassword}>Change password</button>
+                    <button className='rounded-3xl py-2 px-4 hover:bg-yellow-800 hover:text-white hover:font-semibold active:bg-yellow-600' onClick={changePassword}>Change password</button>
                 </div>
             </div>
-            <div className='w-3/5 h-1/3 m-auto '>
-                <div className='flex justify-center items-center'>
-                    <h1 className='text-3xl mb-2'>Favorite places:</h1>
-                </div>
-                <div className='overflow-y-scroll h-4/5' >
-                    {favorites.length > 0 ? (
-                        <ul>
-                            {favorites.map((favorite: any) => (
-                                <li key={favorite.id} className='m-2 border-b border-black p-2 grid grid-cols-3 '>
-                                    {favorite.name}
-                                    <button className='border border-black py-1' style={{ width: "40%" }} onClick={() => removeFavorite(favorite.id, username || "")}>Remove</button>
-                                    {/* Pass a callback function to onClick */}
-                                    <button className='border border-black py-1' style={{ width: "40%" }} onClick={() => readMore(favorite.id)}>Read More</button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>This user has no favorite locations</p>
-                    )}
-                </div>
+            <div className='flex justify-center items-center'>
+                <h1 className='text-3xl font-semibold mb-2'>Favorite places:</h1>
+            </div>
+            <div className=' h-1/3 m-auto flex items-center '>
+                {favorites.length > 0 ? (
+                    <div className='w-full h-[240px]'>
+                        <div className='overflow-y-scroll h-4/5' >
+                            <ul>
+                                {favorites.map((favorite: any) => (
+                                    <li key={favorite.id} className='mx-3 border-b border-black p-2 grid grid-cols-2 gap-x-48'>
+                                        <h1 className='text-lg mt-[6px]'>{favorite.name}</h1>
+                                        <div className='flex justify-evenly'>
+                                            <button className='rounded-lg py-2 px-3 w-2/5 hover:bg-yellow-800 hover:text-white active:bg-yellow-600' onClick={() => removeFavorite(favorite.id, username || "")}>Remove</button>
+                                            <button className='rounded-lg py-2 px-3 w-3/5 hover:bg-yellow-800 hover:text-white active:bg-yellow-600' onClick={() => readMore(favorite.id)}>Read More</button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                ) : (
+                    <div className='flex justify-center items-center'>
+                        <p className='text-2xl text-yellow-800 font-semibold'>This user has no favorite locations</p>
+                    </div>
+                )}
             </div>
         </div>
     )

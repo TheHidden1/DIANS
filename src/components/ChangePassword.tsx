@@ -16,7 +16,7 @@ export default function ChangePassword() {
                 return;
             }
 
-            // Make a request to changePassword API
+            // Enkapsulacija na podatoci za prakjanje do API za promena na password
             const changePasswordData = {
                 username: Cookies.get("username"),
                 oldPassword: oldPassword,
@@ -24,7 +24,8 @@ export default function ChangePassword() {
                 repeatPassword: confirmNewPassword,
             };
 
-            const changePasswordResponse = await axios.post(`https://mht-back-end-deployment.azurewebsites.net/api/v1/user/changePassword?username=${changePasswordData.username}&oldPassword=${changePasswordData.oldPassword}&newPassword=${changePasswordData.newPassword}&repeatPassword=${changePasswordData.repeatPassword}`);
+            // Pravi request do API za promena na password
+            const changePasswordResponse = await axios.post(import.meta.env.VITE_APP_BASE_URL +`/api/v1/user/changePassword?username=${changePasswordData.username}&oldPassword=${changePasswordData.oldPassword}&newPassword=${changePasswordData.newPassword}&repeatPassword=${changePasswordData.repeatPassword}`);
 
             if (changePasswordResponse.status === 200) {
                 setError("");
@@ -33,7 +34,8 @@ export default function ChangePassword() {
             } else {
                 setError(`Password change failed: ${changePasswordResponse.data.message}`);
             }
-        } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
             setError(error.response.data.message);
         }
     };

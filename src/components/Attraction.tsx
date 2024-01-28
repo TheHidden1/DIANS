@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import bgUrl from "../assets/images/kukji.jpg"
 import axios from "axios";
-import useUserComments from "./Comments";
+import useUserComments from "./hooks/Comments";
 import Cookies from "js-cookie";
-import useStarRating from './Rating';
-import useBookmark from './Favorites';
+import useStarRating from './hooks/Rating';
+import useBookmark from './hooks/Favorites';
 import { parseNumbers } from "xml2js/lib/processors";
 
 interface ObjectData {
@@ -13,35 +12,61 @@ interface ObjectData {
   category: string,
   description: string,
   rating: number,
+  reviewList: Comment[];
+}
+interface Comment {
+  id: number;
+  username: string;
+  body: string;
+  rating: number;
+  location: {
+    id: number;
+    name: string;
+    type: string;
+    len: number;
+    lat: number;
+    description: string;
+  };
 }
 
 const Attraction: React.FC = () => {
   const [objectData, setObjectData] = useState<ObjectData | null>(null);
   const [commentInput, setCommentInput] = useState<string>('');
-  const [username] = useState<string | undefined>(Cookies.get("username"));
+  const [text, setText] = useState('');
+  const username = Cookies.get("username");
 
-  const { userComments, postUserComment } = useUserComments("username");
+  const { postUserComment } = useUserComments();
   const { rating, hoveredRating, handleStarClick, handleStarHover, } = useStarRating();
   const { isBookmarked, toggleBookmark } = useBookmark(username || '', objectData);
 
   // const userProfile = useUserProfile(username || "");
   const id = window.location.href.split("?id=")[1];
+  const maxLength = 200;
 
-  const combinedClassName = `h-6 w-6 mt-4 hover:fill-yellow ${isBookmarked ? 'fill-yellow' : ''}`;
+  const getObject = async () => {
+    try {
+      const response = await axios.get<ObjectData>(import.meta.env.VITE_APP_BASE_URL +`/api/v1/objects/id/${id}`);
+      setObjectData(response.data);
+      console.log(response.data)
+
+    } catch (error) {
+      console.error("Error fetching location data: ", error);
+    }
+  };
 
   useEffect(() => {
-    const getObject = async () => {
-      try {
-        const response = await axios.get<ObjectData>(`https://mht-back-end-deployment.azurewebsites.net/api/v1/objects/id/${id}`);
-        setObjectData(response.data);
-        console.log(response.data)
-      
-      } catch (error) {
-        console.error("Error fetching location data: ", error);
-      }
-    };
     getObject();
-  }, [id]);
+  }, []);
+
+  // Ogranicuvanje na dolzina na komentar
+  const handleChange = (event: string) => {
+    const newText = event;
+    if (newText.length <= maxLength) {
+      setText(newText);
+    }
+  };
+
+  const characterCountColor = text.length === maxLength ? 'red' : 'gray';
 
   const renderStarRating = (averageRating: number) => {
     const stars = Array.from({ length: 5 }, (_, index) => index + 1);
@@ -59,7 +84,7 @@ const Attraction: React.FC = () => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 cursor-pointer"
+              className="w-[24px] h-[15px] cursor-pointer"
             >
               <path
                 strokeLinecap="round"
@@ -77,8 +102,9 @@ const Attraction: React.FC = () => {
     postUserComment(commentInput, rating, parseNumbers(id));
     handleStarClick(0);
     setCommentInput('');
+    await getObject();
     // eslint-disable-next-line no-self-assign
-    window.location.href=window.location.href
+    window.location.href = window.location.href
   }
 
   const clearInput = async () => {
@@ -89,40 +115,48 @@ const Attraction: React.FC = () => {
   return (
 
     <div className='fullPageDiv flex flex-col'>
-      <div className='flex flex-row h-full mr-16'>
-        <div className='w-1/2 h-full'>
+      <div className='flex flex-row h-full m-auto'>
+        <div className='w-1/2 h-full ml-12'>
           <div className='font-semibold text-yellow-800 flex flex-col items-center justify-center m-2 h-full space-y-4'>
 
             {/* Location name */}
-            <h1 className="text-3xl">Location: {(objectData?.name)}</h1>
+            <h1 className="text-3xl">Location: {(objectData?.name ?? '').charAt(0).toUpperCase() + (objectData?.name ?? '').slice(1)}</h1>
 
             {/* Location type */}
-            <h1 className="text-2xl">Type: {(objectData?.category)}</h1>
+            <h1 className="text-2xl">Type: {(objectData?.category ?? '').charAt(0).toUpperCase() + (objectData?.category ?? '').slice(1)}</h1>
 
             {/* Location description */}
-            <h1 className="text-xl max-w-[66%] ml-7">Description: {(objectData?.description)?.charAt(0).toUpperCase() + (objectData?.description)?.slice(1)} </h1>
+            <h1 className="text-xl max-w-[66%] ml-7">Description: {(objectData?.description ?? '').charAt(0).toUpperCase() + (objectData?.description ?? '').slice(1)} </h1>
 
             <div>
 
               {/* Average Rating */}
-              <p>Average Rating: {objectData?.rating}</p>
+              <p>
+                {objectData?.rating && objectData.rating > 0.0
+                  ? `Average rating: ${objectData.rating}`
+                  : 'No rating.'}
+              </p>
+
             </div>
 
           </div>
         </div>
-        <div className="flex flex-col m-2 items-center justify-center h-full">
+        <div className="flex flex-col my-2 items-center justify-center h-full">
 
           {/* write the comment */}
           <div className="flex flex-col">
             <textarea
               placeholder="Write yout thoughts..."
+              maxLength={maxLength}
               value={commentInput}
-              onChange={(e) => setCommentInput(e.target.value)}
-              className="rounded-3xl w-[500px] h-[200px] m-2 bg-transparent placeholder-black border-black" />
-
+              onChange={(e) => { setCommentInput(e.target.value); handleChange(e.target.value) }}
+              className="rounded-3xl w-[500px] h-[150px] m-2 mt-6 p-4 bg-transparent placeholder-black border-black" />
+            <div className="flex justify-end mr-4 text-gray" style={{ color: characterCountColor }}>
+              ({text.length} / {maxLength})
+            </div>
             <div className="flex justify-center">
               {/* Add stars here */}
-              <div className="flex space-x-1 mt-4">
+              <div className="flex space-x-1 mt-4 mr-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <svg
                     key={star}
@@ -159,11 +193,11 @@ const Attraction: React.FC = () => {
               {/* Bookmark (Favorites) icon */}
               <svg
                 xmlns='http://www.w3.org/2000/svg'
-                fill='none'
+                fill={isBookmarked ? 'yellow' : 'none'}
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className={combinedClassName}
+                className='fillBookmark'
                 onClick={toggleBookmark}
               >
                 <path
@@ -177,31 +211,37 @@ const Attraction: React.FC = () => {
         </div>
       </div>
       {/* Store comment */}
-      <div className='overflow-y-scroll w-3/5 mx-auto'>
-
-        {/* The comments should appear here */}
-        {objectData?.reviewList?.map((comment) => (
-          <div key={comment.id} className='border-b border-black p-2'>
-            <div className="flex w-full">
-              <div className="w-1/2 pr-2">
-                <div>
-                  Name: {comment.username}
+      <h1 className="mx-auto text-3xl text-yellow-800 font-semibold mb-5">Reviews</h1>
+      <div className='overflow-x-scroll h-3/4 w-2/3 mx-auto mb-3 flex '>
+        {objectData?.reviewList && objectData.reviewList.length > 0 ? (
+          objectData.reviewList.map((comment) => (
+            <div key={comment.id} className='rounded-lg border border-black p-2 m-2 h-52 w-72'>
+              <div className="flex w-full">
+                <div className="w-1/2 pr-2">
+                  <div className="font-semibold">
+                    Name: {comment.username}
+                  </div>
+                </div>
+                <div className="w-1/2 pl-2">
+                  <div>
+                    <span className="font-semibold">Rating:</span> {renderStarRating(comment.rating || 0)} <br />
+                  </div>
                 </div>
               </div>
-              <div className="w-1/2 pl-2">
+              <div className="overflow-y-scroll w-full h-3/4" style={{marginTop: "-10px"}}>
                 <div>
-                  Rating: {renderStarRating(comment.rating || 0)} <br />
+                  {comment.body}
                 </div>
               </div>
             </div>
-            <div className="w-full mt-2">
-              <div>
-                {comment.body}
-              </div>
-            </div>
+          ))
+        ) : (
+          <div className="flex m-auto">
+            <p className="text-2xl text-yellow-800 font-semibold">Be the first to comment.</p>
           </div>
-        ))}
+        )}
       </div>
+
     </div>
   );
 }

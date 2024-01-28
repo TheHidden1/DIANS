@@ -15,7 +15,7 @@ interface UserProfile {
 
 const useUserProfile = (username: string) => {
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-    const apiUrl = `https://mht-back-end-deployment.azurewebsites.net/api/v1/user/username/${username}`;
+    const apiUrl = import.meta.env.VITE_APP_BASE_URL + `/api/v1/user/username/${username}`;
 
     useEffect(() => {
         const fetchUserProfile = async () => {
